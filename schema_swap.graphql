@@ -1,0 +1,43 @@
+type Swap @entity {
+  id:ID!
+  amount0In: BigDecimal!
+  amount0Out: BigDecimal!
+  amount1In: BigDecimal!
+  amount1Out: BigDecimal!
+  to: Bytes!
+  price: BigDecimal!
+  timestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  blockHash: Bytes!
+  from: Bytes!
+  to: Bytes
+  value: BigInt!
+  gasUsed: BigInt!
+  gasPrice: BigInt!
+}
+
+type BondDeposit @entity {
+  id: ID!
+  amount: BigInt!
+  price: BigInt!
+  timestamp: BigInt!
+  bondId: BigInt!
+}
+type Bond @entity {
+  id: ID!
+  quoteToken: Bytes!
+  initialPrice: BigInt!
+  baseToken: Bytes!
+  fixedTerm: Boolean!
+  controlVariable:BigInt!
+  vesting:BigInt!
+  conclusion:BigInt!
+  maxDebt:BigInt!
+
+  
+}

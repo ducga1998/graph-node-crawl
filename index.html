@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.2/chart.min.js"
+    integrity="sha512-VCHVc5miKoln972iJPvkQrUYYq7XpxXzvqNfiul1H4aZDwGBGC0lq373KNleaB2LpnC2a/iNfE5zoRYmB4TRDQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ"
+    crossorigin="anonymous"
+  />
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    .grid {
+      display: flex;
+      width: 1000px;
+    }
+    .grid div {
+      margin-left: 20px;
+      width: 450px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    .w-300 {
+      width: 500px !important;
+    }
+  </style>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+    crossorigin="anonymous"
+  ></script>
+
+  <body>
+    <h2>Bond List</h2>
+    <input type="date" id="time" name="birthday" />
+    <button onclick="submit()">Submit</button>
+    <div class="grid">
+      <div>| Id |</div>
+      <div>| Vesting|</div>
+      <div>
+        |InitialPrice bond|
+      </div>
+      <div>| Amount|</div>
+
+      <div>| Conclusion|</div>
+      <div>| Time Claim|</div>
+    </div>
+    <div id="table1"></div>
+  </body>
+  <script
+    type="text/JavaScript"
+    src=" https://MomentJS.com/downloads/moment.js"
+  ></script>
+  <script>
+    async function update() {
+      const rawData = await $.ajax({
+        url: "http://18.141.225.138:8000/subgraphs/name/test",
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify({
+          query: ` {
+                bondDeposits(skip: 0, first: 1000) {
+                    amount
+                    bondId
+                    id
+                    price
+                    timestamp
+                }
+                bonds {
+                    vesting
+                    baseToken
+                    conclusion
+                    controlVariable
+                    id
+                    fixedTerm
+                    initialPrice
+                    maxDebt
+                    quoteToken
+                }
+            }
+                        `,
+        }),
+        success: function(result) {
+          console.log(result);
+          return result;
+        },
+      });
+
+      const data = rawData.data;
+      const bondDeposits = data.bondDeposits;
+      const bonds = data.bonds;
+      const result = bondDeposits.map((bondDeposit) => {
+        const infoBond = bonds.find((bond) => bondDeposit.bondId === bond.id);
+        infoBond.timeClaim =
+          Number(infoBond.vesting) + Number(bondDeposit.timestamp);
+        return { ...bondDeposit, ...infoBond };
+      });
+      return result;
+    }
+    async function run() {
+      window.allresult = await update();
+      await renderTable();
+    }
+    function renderTable(timeFilter) {
+      let table = document.getElementById("table1");
+      let string = "";
+      for (let i = 0; i < window.allresult.length; i++) {
+        if (timeFilter) {
+          const time = moment(timeFilter).format("MMM DD YY");
+
+          const timeClaim = moment(allresult[i].timeClaim * 1000).format(
+            "MMM DD YY"
+          );
+          //   console.log("time", time, timeClaim);
+          if (time === timeClaim) {
+            string += dataToHTML(window.allresult[i]);
+          } else {
+            break;
+          }
+        } else {
+          string += dataToHTML(window.allresult[i]);
+        }
+      }
+      table.innerHTML = string;
+    }
+    run();
+
+    const dataToHTML = (data) => {
+      return `<div class="grid">
+        <div>${data.id}</div>
+        <div>${data.vesting}</div>
+        <div>${data.initialPrice / 10 ** 9}</div>
+        <div>${(data.amount / 10 ** 18).toFixed(4)}</div>
+        <div>${data.conclusion}</div>
+        <div class="w-300">${new Date(
+          data.timeClaim * 1000
+        ).toLocaleString()}</div>
+      </div>`;
+    };
+    function submit() {
+      const time = document.getElementById("time");
+      const value = time.value;
+      console.log("value", value);
+      renderTable(value);
+    }
+  </script>
+</html>

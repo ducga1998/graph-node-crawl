@@ -1,0 +1,113 @@
+specVersion: 0.0.2
+description: Olympus DAO Subgraph
+repository: https://github.com/OlympusDAO/olympus-subgraph
+# for on-chain
+schema:
+  file: ./schema.graphql
+dataSources:
+  # - kind: ethereum/contract
+  #   name: NFT
+  #   network: mainnet
+  #   source:
+  #     address: '0xaf19C47b5Cd0ebe590f5A56cb1418E7A3CD6B3Af'
+  #     abi: NFT
+  #     startBlock: 18154933 
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - NFT
+  #     abis:
+  #       - name: NFT
+  #         file: ./abis/NFTHectagon.json
+  #     eventHandlers:
+  #       - event: Bond(indexed uint256,uint256,uint256)
+  #         handler: handleDeposit
+  #     file: ./src/BondDeposit.ts
+
+# cancel listing
+  - kind: ethereum/contract
+    name: Cancel
+    network: mainnet
+    source:
+      address: '0x1ABCC462FE9A14a12e6599030233733d8ba57a63'
+      abi: Marketplace
+      startBlock: 18617928 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - cancel
+      abis:
+        - name: Marketplace
+          file: ./abis/MarketplaceHectagon.json
+      eventHandlers:
+        - event: CancelledListing(indexed address,indexed uint256)
+          handler: handleCancel
+      file: ./src/NFT.ts
+# change price listing
+  - kind: ethereum/contract
+    name: ChangePrice
+    network: mainnet
+    source:
+      address: '0x1ABCC462FE9A14a12e6599030233733d8ba57a63'
+      abi: Marketplace
+      startBlock: 18617928 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - listing
+      abis:
+        - name: Marketplace
+          file: ./abis/MarketplaceHectagon.json
+      eventHandlers:
+        - event: ListingPriceChange(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleChangePrice
+      file: ./src/NFT.ts
+# listing listing
+  - kind: ethereum/contract
+    name: Listing
+    network: mainnet
+    source:
+      address: '0x1ABCC462FE9A14a12e6599030233733d8ba57a63'
+      abi: Marketplace
+      startBlock: 18617928 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - listing
+      abis:
+        - name: Marketplace
+          file: ./abis/MarketplaceHectagon.json
+      eventHandlers:
+        - event: NewListing(indexed address,indexed uint256,uint256,indexed address)
+          handler: handleListing
+      file: ./src/NFT.ts
+# purchase listing
+  - kind: ethereum/contract
+    name: PurchasedListing
+    network: mainnet
+    source:
+      address: '0x1ABCC462FE9A14a12e6599030233733d8ba57a63'
+      abi: Marketplace
+      startBlock: 18617928 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - purchase
+      abis:
+        - name: Marketplace
+          file: ./abis/MarketplaceHectagon.json
+      eventHandlers:
+        - event: PurchasedListing(indexed address,address,indexed uint256,uint256,indexed address)
+          handler: handlePurchased
+      file: ./src/NFT.ts
+  

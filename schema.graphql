@@ -1,0 +1,73 @@
+type BondDeposit @entity {
+  id: ID!
+  amount: BigInt!
+  price: BigInt!
+  timestamp: BigInt!
+  bondId: BigInt!
+}
+type Bond @entity {
+  id: ID!
+  quoteToken: Bytes!
+  initialPrice: BigInt!
+  baseToken: Bytes!
+  fixedTerm: Boolean!
+  controlVariable:BigInt!
+  vesting:BigInt!
+  conclusion:BigInt!
+  maxDebt:BigInt!
+
+  
+}
+type Transaction @entity {
+  id: ID!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  blockHash: Bytes!
+  from: Bytes!
+  to: Bytes
+  value: BigInt!
+  gasUsed: BigInt!
+  gasPrice: BigInt!
+}
+
+type Cancel @entity {
+  id:ID!
+  nftID: BigInt!
+  seller: Bytes!
+  timestamp: BigInt!
+}
+
+type Purchase @entity {
+  id:ID!
+  buyer: Bytes!
+  currency: Bytes!
+  nftID: BigInt!
+  price: BigInt!
+  seller: Bytes!
+  timestamp: BigInt!
+}
+type Listing @entity {
+  id:ID!
+  currency: Bytes!
+  nftID: BigInt!
+  price: BigInt!
+  seller: Bytes!
+  timestamp: BigInt!
+}
+type ChangeListing @entity {
+  id:ID!
+  currency: Bytes!
+  nftID: BigInt!
+  price: BigInt!
+  seller: Bytes!
+  timestamp: BigInt!
+}
+type Swap @entity {
+   id:ID!
+  amount0In: BigInt!
+  amount0Out: BigInt!
+  amount1In: BigInt!
+  amount1Out: BigInt!
+  to: Bytes!
+  timestamp: BigInt!
+}

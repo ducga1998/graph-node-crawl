@@ -1,0 +1,27 @@
+specVersion: 0.0.2
+description: Olympus DAO Subgraph
+repository: https://github.com/OlympusDAO/olympus-subgraph
+schema:
+  file: ./schema_swap.graphql
+dataSources:
+# LP Swap
+  - kind: ethereum/contract
+    name: LP
+    network: mainnet
+    source:
+      address: '0x1A6409fCABcFbA421a5aB47d573CbB23909D0999'
+      abi: LP
+      startBlock: 20402443 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - swap
+      abis:
+        - name: LP
+          file: ./abis/LP.json
+      eventHandlers:
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+      file: ./src/swap.ts
