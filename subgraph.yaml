@@ -24,4 +24,69 @@ dataSources:
       eventHandlers:
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSwap
+        - event:  Sync(uint112,uint112)
+          handler : handleSync
       file: ./src/swap.ts
+# Sync (cal price)
+  # - kind: ethereum/contract
+  #   name: Sync
+  #   network: mainnet
+  #   source:
+  #     address: '0x1A6409fCABcFbA421a5aB47d573CbB23909D0999'
+  #     abi: Sync
+  #     startBlock: 20402443 
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - sync
+  #     abis:
+  #       - name: Sync
+  #         file: ./abis/LP.json
+  #     eventHandlers:
+  #       - event: Sync(uint112,uint112)
+  #         handler: handleSync
+  #     file: ./src/swap.ts
+  # # bond deposit
+  - kind: ethereum/contract
+    name: bondv2
+    network: mainnet
+    source:
+      address: '0xd49963c30c0c3c0d6d40dca08308afe36ce54fa9'
+      abi: bondv2
+      startBlock: 20358517  
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - bondv2
+      abis:
+        - name: bondv2
+          file: ./abis/bondv2.json
+      eventHandlers:
+        - event: Bond(indexed uint256,uint256,uint256,uint256,address,indexed address,uint256)
+          handler: handleDeposit
+      file: ./src/BondDeposit.ts
+  # bond redeem
+  - kind: ethereum/contract
+    name: GHecta
+    network: mainnet
+    source:
+      address: '0xa16d5937b56c94b91fe2f4626334e2b4e57f9690'
+      abi: GHecta
+      startBlock: 19350076  
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Ghecta
+      abis:
+        - name: GHecta
+          file: ./abis/GHecta.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleRedeem
+      file: ./src/BondRedeem.ts

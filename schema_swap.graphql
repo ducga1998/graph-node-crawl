@@ -1,12 +1,12 @@
 type Swap @entity {
   id:ID!
-  amount0In: BigDecimal!
-  amount0Out: BigDecimal!
-  amount1In: BigDecimal!
-  amount1Out: BigDecimal!
-  to: Bytes!
-  price: BigDecimal!
-  timestamp: BigInt!
+  amount0In: BigDecimal
+  amount0Out: BigDecimal
+  amount1In: BigDecimal
+  amount1Out: BigDecimal
+  to: Bytes
+  price: BigDecimal
+  timestamp: BigInt
 }
 
 type Transaction @entity {
@@ -38,6 +38,11 @@ type Bond @entity {
   vesting:BigInt!
   conclusion:BigInt!
   maxDebt:BigInt!
-
-  
+}
+type BondRedeem @entity {
+  id: ID!
+  timestamp: BigInt!
+  user: Bytes!
+  from: Bytes
+  amount: BigInt!
 }

@@ -2,18 +2,18 @@
     {
         "inputs": [
             {
-                "internalType": "contract IOlympusAuthority",
+                "internalType": "contract IHectagonAuthority",
                 "name": "_authority",
                 "type": "address"
             },
             {
                 "internalType": "contract IERC20",
-                "name": "_ohm",
+                "name": "_hecta",
                 "type": "address"
             },
             {
-                "internalType": "contract IgOHM",
-                "name": "_gohm",
+                "internalType": "contract IgHECTA",
+                "name": "_ghecta",
                 "type": "address"
             },
             {
@@ -35,7 +35,7 @@
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "contract IOlympusAuthority",
+                "internalType": "contract IHectagonAuthority",
                 "name": "authority",
                 "type": "address"
             }
@@ -62,6 +62,30 @@
                 "indexed": false,
                 "internalType": "uint256",
                 "name": "price",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "noteId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "buyer",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "referral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "commission",
                 "type": "uint256"
             }
         ],
@@ -176,7 +200,7 @@
         "name": "authority",
         "outputs": [
             {
-                "internalType": "contract IOlympusAuthority",
+                "internalType": "contract IHectagonAuthority",
                 "name": "",
                 "type": "address"
             }
@@ -356,19 +380,26 @@
         "name": "deposit",
         "outputs": [
             {
-                "internalType": "uint256",
-                "name": "payout_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "expiry_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "index_",
-                "type": "uint256"
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "finalPayout",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expiry",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "index",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IBondDepository.UserBond",
+                "name": "userBond_",
+                "type": "tuple"
             }
         ],
         "stateMutability": "nonpayable",
@@ -634,6 +665,30 @@
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "partnerRewards",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "percent",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_amount",
                 "type": "uint256"
@@ -740,7 +795,7 @@
             },
             {
                 "internalType": "bool",
-                "name": "_sendgOHM",
+                "name": "_sendgHECTA",
                 "type": "bool"
             }
         ],
@@ -764,7 +819,7 @@
             },
             {
                 "internalType": "bool",
-                "name": "_sendgOHM",
+                "name": "_sendgHECTA",
                 "type": "bool"
             }
         ],
@@ -781,7 +836,20 @@
     },
     {
         "inputs": [],
-        "name": "refReward",
+        "name": "rewardCap",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "rewardTime",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -804,7 +872,17 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "referrer",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "buyer",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "referrerAmount",
                 "type": "uint256"
             }
         ],
@@ -814,7 +892,7 @@
     {
         "inputs": [
             {
-                "internalType": "contract IOlympusAuthority",
+                "internalType": "contract IHectagonAuthority",
                 "name": "_newAuthority",
                 "type": "address"
             }
@@ -828,16 +906,83 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_toFrontEnd",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
                 "name": "_toDAO",
                 "type": "uint256"
             }
         ],
-        "name": "setRewards",
+        "name": "setDAORewards",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_partner",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_percent",
+                "type": "uint256"
+            }
+        ],
+        "name": "setPartnerTerm",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_referrer",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_ref",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_buyer",
+                "type": "uint256"
+            }
+        ],
+        "name": "setReferConfig",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_cap",
+                "type": "uint256"
+            }
+        ],
+        "name": "setRewardCap",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_time",
+                "type": "uint256"
+            }
+        ],
+        "name": "setRewardTime",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -886,38 +1031,6 @@
         "name": "updateTreasury",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_operator",
-                "type": "address"
-            }
-        ],
-        "name": "whitelist",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "whitelisted",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     }
 ]

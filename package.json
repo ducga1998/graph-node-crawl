@@ -7,7 +7,7 @@
     "create-local": "graph create --node http://18.142.55.57:8020/ test",
     "remove-local": "graph remove --node http://18.142.55.57:8020/ test",
     "deploy-local": "graph deploy --node http://18.142.55.57:8020/ --ipfs http://18.142.55.57:5001 test",
-    "quick": "yarn build && yarn deploy-local",
+    "quick": "yarn build && yarn deploy-test-bsc",
     "create-test-bsc": "graph create --node http://54.179.199.171:8020/ swap",
     "deploy-test-bsc": "graph deploy --node http://54.179.199.171:8020/ --ipfs http://54.179.199.171:5001 swap"
   },

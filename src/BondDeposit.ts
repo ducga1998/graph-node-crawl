@@ -2,7 +2,7 @@
 
 import { loadOrCreateTransaction } from "./utils/Transactions"
 import { BondDeposit, Bond as BondInstance } from '../generated/schema'
-import { loadAndCreateBondData } from "./utils/BondData"
+
 import { Bond, CreateMarket } from '../generated/bondv2/bondv2'
 import { bondv2 } from '../generated/bondv2/bondv2'
 import { Address, BigInt } from "@graphprotocol/graph-ts"
@@ -11,7 +11,7 @@ export function handleDeposit(event: Bond): void {
     let transaction = loadOrCreateTransaction(event.transaction, event.block)
     let bondDeposit = new BondDeposit(transaction.id)
     bondDeposit.amount = event.params.amount
-    bondDeposit.r = event.params.id
+    bondDeposit.bondId = event.params.id
     bondDeposit.timestamp = transaction.timestamp
     bondDeposit.price = event.params.price
     // let bondContract = bondv2.bind(Address.fromString(BOND_DEPOSITORY_CONTRACT))
